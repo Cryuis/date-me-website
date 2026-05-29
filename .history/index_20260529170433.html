@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Will You Go on a Date?</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(
+          135deg,
+          #ff6b9d 0%,
+          #c86dd7 50%,
+          #9b59b6 100%
+        );
+        padding: 15px;
+        overflow: hidden;
+      }
+
+      .container {
+        background: white;
+        border-radius: 30px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+        max-width: 550px;
+        width: 100%;
+        animation: slideUp 0.6s ease-out;
+        position: relative;
+        z-index: 10;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .heart {
+        font-size: 100px;
+        margin-bottom: 20px;
+        animation: heartbeat 1.2s infinite;
+        display: inline-block;
+      }
+
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        25% {
+          transform: scale(1.15);
+        }
+        50% {
+          transform: scale(1);
+        }
+      }
+
+      h1 {
+        color: #2d3436;
+        font-size: 36px;
+        margin: 15px 0;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+
+      .subtitle {
+        color: #636e72;
+        font-size: 17px;
+        margin-bottom: 40px;
+        font-weight: 500;
+      }
+
+      .button-container {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        min-height: 70px;
+        position: relative;
+      }
+
+      button {
+        padding: 16px 45px;
+        font-size: 17px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .yes-btn {
+        background: linear-gradient(135deg, #ff6b9d, #ee5a6f);
+        color: white;
+        min-width: 130px;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .yes-btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 15px 35px rgba(255, 107, 107, 0.5);
+      }
+
+      .yes-btn:active {
+        transform: scale(0.95);
+      }
+
+      .no-btn {
+        background: linear-gradient(135deg, #dfe6e9, #b2bec3);
+        color: #2d3436;
+        min-width: 130px;
+        font-weight: 700;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        flex-shrink: 0;
+        transition: all 0.15s ease-out;
+      }
+
+      .no-btn:hover {
+        background: linear-gradient(135deg, #b2bec3, #a4afb9);
+      }
+
+      .no-btn.escaped {
+        position: fixed;
+        z-index: 9999;
+      }
+
+      .excuse-popup {
+        position: fixed;
+        background: white;
+        padding: 12px 20px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+        font-weight: 600;
+        color: #ff6b9d;
+        z-index: 10000;
+        animation:
+          popIn 0.3s ease-out,
+          fadeOut 0.3s ease-in 1.2s forwards;
+        pointer-events: none;
+      }
+
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: scale(0.5) translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+      }
+
+      .success-message {
+        display: none;
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.7);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .success-message h2 {
+        color: #ff6b9d;
+        font-size: 32px;
+        margin: 20px 0;
+        font-weight: 700;
+      }
+
+      .success-message p {
+        color: #636e72;
+        font-size: 17px;
+        margin: 12px 0;
+        font-weight: 500;
+      }
+
+      .celebration {
+        font-size: 70px;
+        animation: float 2s ease-in-out infinite;
+        display: inline-block;
+        margin: 10px 5px;
+      }
+
+      .celebration:nth-child(2) {
+        animation-delay: 0.3s;
+      }
+
+      .celebration:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+
+      .celebration-line {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 15px 0;
+        flex-wrap: wrap;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+
+      .highlight {
+        margin: 20px 0;
+        font-size: 19px;
+        color: #ff6b9d;
+        font-weight: 700;
+      }
+
+      .final-note {
+        margin-top: 25px;
+        font-size: 16px;
+      }
+
+      .confetti {
+        position: fixed;
+        pointer-events: none;
+        z-index: 9998;
+        animation: fall linear forwards;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      /* Mobile Optimization */
+      @media (max-width: 768px) {
+        body {
+          padding: 12px;
+        }
+
+        .container {
+          padding: 30px;
+          border-radius: 25px;
+        }
+
+        h1 {
+          font-size: 28px;
+          margin: 12px 0;
+        }
+
+        .heart {
+          font-size: 80px;
+          margin-bottom: 15px;
+        }
+
+        .subtitle {
+          font-size: 15px;
+          margin-bottom: 30px;
+        }
+
+        .button-container {
+          min-height: 65px;
+          gap: 15px;
+        }
+
+        button {
+          padding: 14px 40px;
+          font-size: 16px;
+          letter-spacing: 1px;
+          min-width: 120px;
+        }
+
+        .yes-btn {
+          font-size: 16px;
+        }
+
+        .celebration {
+          font-size: 60px;
+          margin: 8px 4px;
+        }
+
+        .success-message h2 {
+          font-size: 28px;
+        }
+
+        .success-message p {
+          font-size: 16px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 25px;
+          border-radius: 20px;
+        }
+
+        h1 {
+          font-size: 24px;
+          margin: 10px 0;
+        }
+
+        .heart {
+          font-size: 70px;
+          margin-bottom: 12px;
+        }
+
+        .subtitle {
+          font-size: 14px;
+          margin-bottom: 25px;
+        }
+
+        .button-container {
+          min-height: 60px;
+          gap: 12px;
+        }
+
+        button {
+          padding: 12px 35px;
+          font-size: 15px;
+          letter-spacing: 0.8px;
+          min-width: 110px;
+          border-radius: 45px;
+        }
+
+        .yes-btn {
+          font-size: 15px;
+        }
+
+        .celebration {
+          font-size: 50px;
+          margin: 6px 3px;
+        }
+
+        .success-message h2 {
+          font-size: 24px;
+          margin: 15px 0;
+        }
+
+        .success-message p {
+          font-size: 15px;
+          margin: 8px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="question">
+        <div class="heart">💕</div>
+        <h1>Will You Go On A Date With Me?</h1>
+        <p class="subtitle">Give it a try... I dare you to click no! 😉</p>
+
+        <div class="button-container">
+          <button class="yes-btn" id="yesBtn">YES! 💘</button>
+          <button class="no-btn" id="noBtn">NO</button>
+        </div>
+      </div>
+
+      <div id="success" class="success-message">
+        <div class="celebration-line">
+          <div class="celebration">🎉</div>
+          <div class="celebration">✨</div>
+          <div class="celebration">🎉</div>
+        </div>
+        <h2>YES!!! 🥰</h2>
+        <p>You've made me the happiest person ever!</p>
+        <p class="highlight">You're absolutely wonderful! 💕</p>
+        <div class="celebration-line">
+          <div class="celebration">❤️</div>
+          <div class="celebration">💘</div>
+          <div class="celebration"></div>
+        </div>
+        <p class="final-note">Let's make this the best date ever... 🌹</p>
+      </div>
+    </div>
+
+    <script>
+      const noBtn = document.getElementById("noBtn");
+      const yesBtn = document.getElementById("yesBtn");
+      const questionSection = document.getElementById("question");
+      const successSection = document.getElementById("success");
+
+      const excuses = [
+        "You can't catch me! 😆",
+        "Not so fast! 🏃",
+        "Come on, try again! 😜",
+        "I'm too fast for you! ⚡",
+        "Nice try though! 😏",
+        "There's only YES here! 💕",
+        "Almost got me! 😄",
+        "Gotta be quicker! 🚀",
+        "Why would you even? 🤔",
+        "The YES button looks lonely! 💘",
+      ];
+
+      let escapeCount = 0;
+      let lastEscapeTime = 0;
+      const escapeThrottle = 100; // Minimum ms between escapes
+
+      function showExcuse(x, y) {
+        const popup = document.createElement("div");
+        popup.className = "excuse-popup";
+        popup.textContent = excuses[Math.floor(Math.random() * excuses.length)];
+        popup.style.left = `${Math.min(x, window.innerWidth - 200)}px`;
+        popup.style.top = `${Math.max(y - 50, 10)}px`;
+        document.body.appendChild(popup);
+
+        setTimeout(() => popup.remove(), 1500);
+      }
+
+      function avoidCursor(event) {
+        const now = Date.now();
+        if (now - lastEscapeTime < escapeThrottle) return;
+        lastEscapeTime = now;
+
+        escapeCount++;
+
+        const btnRect = noBtn.getBoundingClientRect();
+        const btnWidth = btnRect.width;
+        const btnHeight = btnRect.height;
+        const padding = 20;
+
+        // Calculate safe bounds
+        const maxX = window.innerWidth - btnWidth - padding;
+        const maxY = window.innerHeight - btnHeight - padding;
+
+        // Generate new position away from current position
+        let newX, newY;
+        const currentX = btnRect.left;
+        const currentY = btnRect.top;
+
+        do {
+          newX = Math.max(padding, Math.random() * maxX);
+          newY = Math.max(padding, Math.random() * maxY);
+        } while (
+          Math.abs(newX - currentX) < 100 &&
+          Math.abs(newY - currentY) < 100
+        );
+
+        noBtn.classList.add("escaped");
+        noBtn.style.left = `${newX}px`;
+        noBtn.style.top = `${newY}px`;
+
+        // Show excuse popup occasionally
+        if (escapeCount % 2 === 0 || Math.random() > 0.6) {
+          showExcuse(event?.clientX || newX, event?.clientY || newY);
+        }
+
+        // Make YES button grow after several attempts
+        if (escapeCount > 3) {
+          const scale = Math.min(1 + (escapeCount - 3) * 0.05, 1.3);
+          yesBtn.style.transform = `scale(${scale})`;
+        }
+      }
+
+      // Mouse events
+      noBtn.addEventListener("mouseenter", avoidCursor);
+
+      // Touch events for mobile
+      noBtn.addEventListener(
+        "touchstart",
+        (e) => {
+          e.preventDefault();
+          avoidCursor(e.touches[0]);
+        },
+        { passive: false },
+      );
+
+      // Prevent actual click
+      noBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        avoidCursor(e);
+        return false;
+      });
+
+      // YES button handler
+      yesBtn.addEventListener("click", handleYes);
+
+      function handleYes() {
+        questionSection.style.display = "none";
+        successSection.style.display = "block";
+
+        // Hide the escaped NO button if it exists
+        noBtn.style.display = "none";
+
+        createConfetti();
+      }
+
+      function createConfetti() {
+        const colors = [
+          "#ff6b9d",
+          "#ff8787",
+          "#ffa5a5",
+          "#ffe066",
+          "#69db7c",
+          "#a8e6cf",
+          "#74b9ff",
+          "#a29bfe",
+          "#fd79a8",
+          "#ffeaa7",
+        ];
+        const emojis = ["🎉", "💕", "✨", "🎊", "💘", "🌹", "⭐", "💖", "❤️"];
+
+        const confettiCount = 100;
+
+        for (let i = 0; i < confettiCount; i++) {
+          setTimeout(() => {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+
+            const useEmoji = Math.random() > 0.6;
+            const startX = Math.random() * 100;
+            const duration = 2 + Math.random() * 2;
+            const delay = Math.random() * 0.5;
+
+            confetti.style.left = `${startX}%`;
+            confetti.style.top = "-20px";
+            confetti.style.animationDuration = `${duration}s`;
+            confetti.style.animationDelay = `${delay}s`;
+
+            if (useEmoji) {
+              confetti.style.fontSize = `${20 + Math.random() * 15}px`;
+              confetti.textContent =
+                emojis[Math.floor(Math.random() * emojis.length)];
+            } else {
+              const size = 8 + Math.random() * 8;
+              confetti.style.width = `${size}px`;
+              confetti.style.height = `${size}px`;
+              confetti.style.background =
+                colors[Math.floor(Math.random() * colors.length)];
+              confetti.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+            }
+
+            document.body.appendChild(confetti);
+
+            // Clean up after animation
+            setTimeout(
+              () => confetti.remove(),
+              (duration + delay) * 1000 + 100,
+            );
+          }, i * 30); // Stagger creation
+        }
+      }
+    </script>
+  </body>
+</html>

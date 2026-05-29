@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Go on a Date?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .heart {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: heartbeat 1.2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 60px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .yes-btn:active {
+            transform: scale(0.98);
+        }
+
+        .no-btn {
+            background: #e0e0e0;
+            color: #333;
+            position: absolute;
+            min-width: 120px;
+        }
+
+        .no-btn:hover {
+            background: #d0d0d0;
+        }
+
+        .success-message {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .success-message h2 {
+            color: #ff6b6b;
+            font-size: 28px;
+            margin: 20px 0;
+        }
+
+        .success-message p {
+            color: #666;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .celebration {
+            font-size: 50px;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .heart {
+                font-size: 60px;
+            }
+
+            button {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="question">
+            <div class="heart">💕</div>
+            <h1>Will You Go On A Date With Me?</h1>
+            <p class="subtitle">Give it a try... I dare you to click no! 😉</p>
+            
+            <div class="button-container">
+                <button class="yes-btn" onclick="handleYes()">YES! 💘</button>
+                <button class="no-btn" id="noBtn" onmouseenter="avoidCursor()" ontouchstart="avoidCursor()">NO</button>
+            </div>
+        </div>
+
+        <div id="success" class="success-message">
+            <div class="celebration">🎉</div>
+            <h2>YESSS! 🥰</h2>
+            <p>You've made me the happiest!</p>
+            <p>Let's plan an amazing date...</p>
+            <div class="celebration" style="margin-top: 20px;">💑</div>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const questionSection = document.getElementById('question');
+        const successSection = document.getElementById('success');
+
+        function avoidCursor() {
+            // Generate random position
+            const randomX = Math.random() * window.innerWidth;
+            const randomY = Math.random() * window.innerHeight;
+            
+            // Move button away from cursor
+            const containerRect = noBtn.parentElement.getBoundingClientRect();
+            const containerCenterX = containerRect.left + containerRect.width / 2;
+            const containerCenterY = containerRect.top + containerRect.height / 2;
+
+            // Calculate random offset away from center
+            const offsetX = (Math.random() - 0.5) * 300;
+            const offsetY = (Math.random() - 0.5) * 300;
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = (containerCenterX + offsetX - 60) + 'px';
+            noBtn.style.top = (containerCenterY + offsetY - 30) + 'px';
+
+            // Add fun message with random excuses
+            const excuses = [
+                "You can't catch me! 😆",
+                "Not so fast! 🏃",
+                "Come on, try again! 😜",
+                "I'm too fast for you! ⚡",
+                "You don't want to click that anyway! 😏",
+                "There's only YES here! 💕"
+            ];
+
+            // Randomly show a message (30% chance)
+            if (Math.random() > 0.7) {
+                const excuse = excuses[Math.floor(Math.random() * excuses.length)];
+                // You could display this in a small tooltip if desired
+            }
+        }
+
+        // Also handle when trying to click the button directly
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            avoidCursor();
+            return false;
+        });
+
+        // Handle touch on mobile
+        noBtn.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            avoidCursor();
+        });
+
+        function handleYes() {
+            questionSection.style.display = 'none';
+            successSection.style.display = 'block';
+
+            // Create confetti effect
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#ff8787', '#ffa5a5', '#ffe066', '#69db7c', '#a8e6cf'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear`;
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        // Add confetti animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
